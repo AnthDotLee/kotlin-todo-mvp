@@ -18,13 +18,13 @@ android {
             minifyEnabled true
             useProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            testProgaurdFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
+            testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
         }
         release {
             minifyEnabled true
             useProguard true
-            proguardFiles getDefaultProgaurdFile('proguard-android.txt'), 'proguard-rules.pro'
-            testProgaurdFiles getDefaultProgaurdFile('proguard-android.txt'), 'proguardTest-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            testProguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguardTest-rules.pro'
         }
     }
 
