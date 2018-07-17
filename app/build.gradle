@@ -1,0 +1,61 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "com.example.anthony.basictodoapp"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled true
+            useProguard false
+            progaurdFiles getDefaultProgaurdFile('progaurd-android.txt'), 'progaurd-rules.pro'
+            testProgaurdFiles getDefaultProgaurdFile('progaurd-android.txt'), 'progaurd-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            useProguard true
+            progaurdFiles getDefaultProgaurdFile('progaurd-android.txt'), 'progaurd-rules.pro'
+            testProgaurdFiles getDefaultProgaurdFile('progaurd-android.txt'), 'progaurd-rules.pro'
+        }
+    }
+
+    flavorDimension "default"
+
+    productFlavors {
+        mock {
+            applicationIdSuffix = ".mock"
+            dimension "default"
+        }
+        prod {
+            dimension "default"
+        }
+    }
+
+    // We're removing mockRelease for some reason
+    android.variantFilter { variant ->
+        if(variant.buildType.name == 'release' && variant.flavors[0].name == 'mock') {
+            variant.ignore = true
+        }
+    }
+
+    // Show the results of all unit tests, including passing tests
+    testOptions.unitTests.all {
+        testLogging {
+            events 'passed', 'skipped', 'failed', 'sandardOut', 'standardError'
+        }
+    }
+}
+
+// Putting dep versions at the top level prevents us from accidentally mixing versions in submodules
+dependencies {
+    // App deps, including test
+}
