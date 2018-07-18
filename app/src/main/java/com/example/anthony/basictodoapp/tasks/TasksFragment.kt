@@ -4,15 +4,14 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import com.example.anthony.basictodoapp.R
 import com.example.anthony.basictodoapp.data.Task
+import org.w3c.dom.Text
 
 class TasksFragment : Fragment(), TasksContract.View {
     override lateinit var presenter: TasksContract.Presenter
+
 
     override var isActive: Boolean = false
         get() = isAdded
@@ -25,7 +24,7 @@ class TasksFragment : Fragment(), TasksContract.View {
     private lateinit var filteringLabelView: TextView
 
     // Listener for clicks on tasks in the view
-    internal var itemListener: TaskItemListener = object : TaskItemListener {
+    internal var itemListener: TaskAdapter.TaskItemListener = object : TaskItemListener {
         override fun onTaskClick(clickedTask: Task) {
             presenter.openTaskDetails(clickedTask)
         }
@@ -41,8 +40,68 @@ class TasksFragment : Fragment(), TasksContract.View {
 
     private val listAdapter = TaskAdapter(ArrayList(0), itemListener)
 
-    private class TaskAdapter(tasks: List<Task>, private val itemListener: TaskItemListener)
-        : BaseAdapter() {
+    override fun setLoadingIndicator(active: Boolean) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showAddTask() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showTaskDetailsUi(taskId: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showTaskMarkedComplete() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showTaskMarkedActive() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showCompletedTasksCleared() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showLoadingTasksError() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showNoTasks() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showActiveFilterLabel() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showCompletedFilterLabel() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showAllFilterLabel() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showNoActiveTasks() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showNoCompletedTasks() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showSuccessfullySavedMessage() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showFilteringPopUpMenu() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private class TaskAdapter(tasks: List<Task>, private val itemListener: TaskItemListener) :
+        BaseAdapter() {
 
         var tasks: List<Task> = tasks
             set(tasks) {
@@ -58,9 +117,34 @@ class TasksFragment : Fragment(), TasksContract.View {
 
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
             val task = getItem(i)
-            val rowView = view ?: LayoutInflater.from(viewGroup.context).inflate(R.layout.task_item, viewGroup, false)
+            val rowView = view ?: LayoutInflater.from(viewGroup.context).inflate(
+                R.layout.task_item,
+                viewGroup,
+                false
+            )
 
-            with(rowView.findViewById<TextView>(R.id.title))
+            // The below block is the same as doing this:
+            // rowView.findViewById<TextView>(R.id.title).text = task.titleForList
+            with(rowView.findViewById<TextView>(R.id.title)) {
+                text = task.titleForList
+            }
+
+            with(rowView.findViewById<CheckBox>(R.id.complete)) {
+                // active/completed task ui
+                isChecked = task.isCompleted
+                val rowViewBackground =
+                    if (task.isCompleted) R.drawable.list_completed_touch_feedback
+                    else R.drawable.touch_feedback
+                rowView.setBackgroundResource(rowViewBackground)
+                setOnClickListener {
+                    if(!task.isCompleted) {
+                        itemListener.onCompleteTaskClick(task)
+                    } else {
+                        itemListener.onActivateTaskClick(task)
+                    }
+                }
+            }
+
         }
     }
 
