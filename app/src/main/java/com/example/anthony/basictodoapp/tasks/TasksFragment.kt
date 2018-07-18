@@ -1,10 +1,14 @@
 package com.example.anthony.basictodoapp.tasks
 
 import android.support.v4.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.example.anthony.basictodoapp.R
 import com.example.anthony.basictodoapp.data.Task
 
 class TasksFragment : Fragment(), TasksContract.View {
@@ -35,7 +39,30 @@ class TasksFragment : Fragment(), TasksContract.View {
         }
     }
 
+    private val listAdapter = TaskAdapter(ArrayList(0), itemListener)
 
+    private class TaskAdapter(tasks: List<Task>, private val itemListener: TaskItemListener)
+        : BaseAdapter() {
+
+        var tasks: List<Task> = tasks
+            set(tasks) {
+                field = tasks
+                notifyDataSetChanged()
+            }
+
+        override fun getCount() = tasks.size
+
+        override fun getItem(i: Int) = tasks[i]
+
+        override fun getItemId(i: Int) = i.toLong()
+
+        override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
+            val task = getItem(i)
+            val rowView = view ?: LayoutInflater.from(viewGroup.context).inflate(R.layout.task_item, viewGroup, false)
+
+            with(rowView.findViewById<TextView>(R.id.title))
+        }
+    }
 
     interface TaskItemListener {
         fun onTaskClick(clickedTask: Task)
