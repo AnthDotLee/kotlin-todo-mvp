@@ -26,7 +26,7 @@ class TasksFragment : Fragment(), TasksContract.View {
             presenter.openTaskDetails(clickedTask)
         }
 
-        override fun onCompleteTskClick(completedTask: Task) {
+        override fun onCompleteTaskClick(completedTask: Task) {
             presenter.completeTask(completedTask)
         }
 
@@ -40,7 +40,7 @@ class TasksFragment : Fragment(), TasksContract.View {
     interface TaskItemListener {
         fun onTaskClick(clickedTask: Task)
 
-        fun onCompleteTskClick(completeTask: Task)
+        fun onCompleteTaskClick(completedTask: Task)
 
         fun onActivateTaskClick(activatedTask: Task)
     }
