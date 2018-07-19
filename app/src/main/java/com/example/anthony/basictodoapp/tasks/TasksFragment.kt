@@ -144,7 +144,8 @@ class TasksFragment : Fragment(), TasksContract.View {
                     }
                 }
             }
-
+            rowView.setOnClickListener { itemListener. onTaskClick(task)}
+            return rowView
         }
     }
 
