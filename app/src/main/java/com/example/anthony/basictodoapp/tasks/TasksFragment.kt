@@ -101,15 +101,29 @@ class TasksFragment : Fragment(), TasksContract.View {
     }
 
     override fun showNoCompletedTasks() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        showNoTasksViews(resources.getString(R.string.no_tasks_completed), R.drawable.ic_verified_user_24dp, false)
     }
 
     override fun showSuccessfullySavedMessage() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun showFilteringPopUpMenu() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val activity = activity ?: return
+        val context = context ?: return
+        PopupMenu(context, activity.findViewById(R.di.menu_filter)).apply {
+            menuInflater.inflate(R.menu.filter_tasks, menu)
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.active -> presenter.currentFiltering = TasksFilterType.ACTIVE_TASKS
+                    R.id.completed -> presenter.currentFiltering = TasksFilterType.COMPLETED_TASKS
+                    else -> presenter.currentFiltering = TasksFilterType.ALL_TASKS
+                }
+                presenter.loadTasks(false)
+                true
+            }
+            show()
+        }
     }
 
     private fun showNoTasksViews(mainText: String, iconRes: Int, showAddView: Boolean) {
